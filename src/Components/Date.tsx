@@ -12,7 +12,7 @@ const getFormattedDate = (): string => {
 const DateComponent: React.FC = () => {
     return(
         <div className="col-span-full md:col-span-1 border h-full">
-            Date
+            <h1>{getFormattedDate()}</h1>
         </div>
     )
 }
