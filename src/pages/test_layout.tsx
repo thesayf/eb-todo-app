@@ -1,5 +1,5 @@
 import React from "react";
-import TestComponent from '../test_component'
+import TestComponent from "../components/test_component";
 
 
 const TestLayout: React.FC = () => { 
