@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../components/Logo";
+import Logo from "../components/logo"
 import AppName from "../components/AppName"
 import DATEHEADER from "../headers/DateHeader"
 import MAINGOALHEADER from "../headers/MainGoalHeader";
