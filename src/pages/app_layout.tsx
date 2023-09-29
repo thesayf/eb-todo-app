@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../components/logo"
+// import Logo from "../components/Logo"
 import AppName from "../components/AppName"
 import DATEHEADER from "../headers/DateHeader"
 import MAINGOALHEADER from "../headers/MainGoalHeader";
@@ -20,7 +20,7 @@ const AppLayout: React.FC = () => {
 
             {/* Logo and App Name */}
             <div className="grid grid-cols-1 md:grid-cols-2 h-20">
-                <Logo/>
+                {/* <Logo/> */}
                 <AppName/>
             </div>
 
