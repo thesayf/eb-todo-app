@@ -1,20 +1,18 @@
 import React from "react";
-import Logo from "../components/logo"
-// import Logo from "../components/logo"
-// import Logo from '../components/Logo'
-// import AppName from "../components/AppName"
-// import DATEHEADER from "../headers/DateHeader"
-// import MAINGOALHEADER from "../headers/MainGoalHeader";
-// import MainGoal from "../components/MainGoal";
-// import DateComponent from "../components/Date";
-// import KeyObjectivesHeader from "../headers/KeyObjectivesHeader";
-// import ObjectiveOne from "../components/ObjectiveOne";
-// import ObjectiveTwo from "../components/ObjectiveTwo";
-// import ObjectiveThree from "../components/ObjectiveThree";
-// import ObjectiveFour from "../components/ObjectiveFour";
-// import ScheduleHeader from "../headers/ScheduleHeader";
-// import TimeSlot from "../components/TimeSlot";
-// import TimeSlotAdder from "../components/TimeSlotAdder";
+import Logo from "../components/logo_component"
+import AppName from "../components/app_name_component"
+import DateHeader from "../headers/date_header";
+import MainGoalHeader from "../headers/main_goal_header";
+import MainGoal from "../components/main_goal_component";
+import DateComponent from "../components/date_component";
+import KeyObjectivesHeader from "../headers/key_objectives_header";
+import ObjectiveOne from "../components/objective_one_component";
+import ObjectiveTwo from "../components/objective_two_component";
+import ObjectiveThree from "../components/objective_three_component";
+import ObjectiveFour from "../components/objective_four_component";
+import ScheduleHeader from "../headers/schedule_header";
+import TimeSlot from "../components/time_slot_component";
+import TimeSlotAdder from "../components/time_slot_adder_component";
 
 const AppLayout: React.FC = () => {
     return(
@@ -23,43 +21,43 @@ const AppLayout: React.FC = () => {
             {/* Logo and App Name */}
             <div className="grid grid-cols-1 md:grid-cols-2 h-20">
                 <Logo/>
-                {/* <AppName/> */}
+                <AppName/>
             </div>
 
             {/* Date and Main Goal Headers */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-2">
-                {/* <DATEHEADER/>
-                <MAINGOALHEADER/> */}
+                <DateHeader/>
+                <MainGoalHeader/>
             </div>
 
             {/* Date and Main Goal */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 h-16 mt-2">
-                {/* <DateComponent/>
-                <MainGoal/> */}
+                <DateComponent/>
+                <MainGoal/>
             </div>
 
             {/* Header For Key Objectives */}
             <div className="grid grid-cols-1 mt-2 ">
-                {/* <KeyObjectivesHeader/> */}
+                <KeyObjectivesHeader/>
             </div>
 
             {/* 4 Sub Objectives */}
             <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 gap-4 mt-2">                
-                {/* <ObjectiveOne/>
+                <ObjectiveOne/>
                 <ObjectiveTwo/>
                 <ObjectiveThree/>
-                <ObjectiveFour/>     */}
+                <ObjectiveFour/>    
             </div>
 
             {/* Header For Todays Schedule */}
             <div className="grid grid-cols-1 mt-2">
-                {/* <ScheduleHeader/> */}
+                <ScheduleHeader/>
             </div>
 
             {/* Time Table */}
             <div className="grid grid-cols-1 gap-4 mt-2">
-                {/* <TimeSlot/>
-                <TimeSlotAdder/> */}
+                <TimeSlot/>
+                <TimeSlotAdder/>
             </div>
 
         </div>
