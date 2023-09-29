@@ -6,7 +6,7 @@ const TestLayout: React.FC = () => {
 
     return(
         <div>
-            <h1>Test Layout</h1>
+            <TestComponent/>
         </div>
     )
 }
