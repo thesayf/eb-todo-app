@@ -1,18 +1,18 @@
 import React from "react";
-import Logo from "../Components/Logo";
-import AppName from "../Components/AppName"
-import DATEHEADER from "../Headers/DateHeader"
-import MAINGOALHEADER from "../Headers/MainGoalHeader";
-import MainGoal from "../Components/MainGoal";
-import DateComponent from "../Components/Date";
-import KeyObjectivesHeader from "../Headers/KeyObjectivesHeader";
-import ObjectiveOne from "../Components/ObjectiveOne";
-import ObjectiveTwo from "../Components/ObjectiveTwo";
-import ObjectiveThree from "../Components/ObjectiveThree";
-import ObjectiveFour from "../Components/ObjectiveFour";
-import ScheduleHeader from "../Headers/ScheduleHeader";
-import TimeSlot from "../Components/TimeSlot";
-import TimeSlotAdder from "../Components/TimeSlotAdder";
+import Logo from "../components/Logo";
+import AppName from "../components/AppName"
+import DATEHEADER from "../headers/DateHeader"
+import MAINGOALHEADER from "../headers/MainGoalHeader";
+import MainGoal from "../components/MainGoal";
+import DateComponent from "../components/Date";
+import KeyObjectivesHeader from "../headers/KeyObjectivesHeader";
+import ObjectiveOne from "../components/ObjectiveOne";
+import ObjectiveTwo from "../components/ObjectiveTwo";
+import ObjectiveThree from "../components/ObjectiveThree";
+import ObjectiveFour from "../components/ObjectiveFour";
+import ScheduleHeader from "../headers/ScheduleHeader";
+import TimeSlot from "../components/TimeSlot";
+import TimeSlotAdder from "../components/TimeSlotAdder";
 
 const AppLayout: React.FC = () => {
     return(
