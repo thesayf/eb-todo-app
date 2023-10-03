@@ -1,7 +1,5 @@
 import React from "react";
 import Logo from "../components/logo_component"
-import AppName from "../components/app_name_component"
-import DateHeader from "../headers/date_header";
 import MainGoalHeader from "../headers/main_goal_header";
 import MainGoal from "../components/main_goal_component";
 import DateComponent from "../components/date_component";
@@ -21,18 +19,17 @@ const AppLayout: React.FC = () => {
             {/* Logo and App Name */}
             <div className="grid grid-cols-1 md:grid-cols-2 h-20">
                 <Logo/>
-                <AppName/>
+                <DateComponent/>
             </div>
 
             {/* Date and Main Goal Headers */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-2">
-                <DateHeader/>
                 <MainGoalHeader/>
             </div>
 
             {/* Date and Main Goal */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 h-16 mt-2">
-                <DateComponent/>
+                
                 <MainGoal/>
             </div>
 
