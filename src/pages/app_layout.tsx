@@ -12,9 +12,21 @@ import ScheduleHeader from "../headers/schedule_header";
 import TimeSlot from "../components/time_slot_component";
 import TimeSlotAdder from "../components/time_slot_adder_component";
 import SubmittedTimeSlot from "../components/submitted_time_slot_component";
+import Navbar from "../components/navbar_component";
+import DayTab from "../components/day_tab_component";
+
+
 const AppLayout: React.FC = () => {
     return(
         <div className="mx-20 my-10">
+
+            {/* New Section: Aligning to the right */}
+            <div className="grid grid-cols-1 md:grid-cols-2" >
+                <Navbar/>
+                <DayTab/>
+            </div>
+
+            
 
             {/* Logo and App Name */}
             <div className="grid grid-cols-1 md:grid-cols-2 h-20">

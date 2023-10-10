@@ -1,9 +1,12 @@
 import React from 'react';
 import AppLayout from "./pages/app_layout"
+import { AppProvider } from "./app_context"
 
 function App() {
   return (
-    <AppLayout/>
+    <AppProvider>
+      <AppLayout/>
+    </AppProvider>
   )
 }
 
