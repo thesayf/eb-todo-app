@@ -20,13 +20,11 @@ const AppLayout: React.FC = () => {
     return(
         <div className="mx-20 my-10">
 
-            {/* New Section: Aligning to the right */}
+            {/* Nav bar and Day Tab*/}
             <div className="grid grid-cols-1 md:grid-cols-2" >
                 <Navbar/>
                 <DayTab/>
             </div>
-
-            
 
             {/* Logo and App Name */}
             <div className="grid grid-cols-1 md:grid-cols-2 h-20">
