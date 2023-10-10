@@ -11,7 +11,7 @@ import ObjectiveFour from "../components/objective_four_component";
 import ScheduleHeader from "../headers/schedule_header";
 import TimeSlot from "../components/time_slot_component";
 import TimeSlotAdder from "../components/time_slot_adder_component";
-
+import SubmittedTimeSlot from "../components/submitted_time_slot_component";
 const AppLayout: React.FC = () => {
     return(
         <div className="mx-20 my-10">
@@ -53,6 +53,7 @@ const AppLayout: React.FC = () => {
 
             {/* Time Table */}
             <div className="grid grid-cols-1 gap-4 mt-2">
+                <SubmittedTimeSlot/>
                 <TimeSlot/>
                 <TimeSlotAdder/>
             </div>
