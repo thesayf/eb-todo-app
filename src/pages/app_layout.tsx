@@ -9,11 +9,9 @@ import ObjectiveTwo from "../components/objective_two_component";
 import ObjectiveThree from "../components/objective_three_component";
 import ObjectiveFour from "../components/objective_four_component";
 import ScheduleHeader from "../headers/schedule_header";
-import TimeSlot from "../components/time_slot_component";
-import TimeSlotAdder from "../components/time_slot_adder_component";
-import SubmittedTimeSlot from "../components/submitted_time_slot_component";
 import Navbar from "../components/navbar_component";
 import DayTab from "../components/day_tab_component";
+import TimeSlotContainer from "../containers/time_slot_container";
 
 
 const AppLayout: React.FC = () => {
@@ -63,9 +61,7 @@ const AppLayout: React.FC = () => {
 
             {/* Time Table */}
             <div className="grid grid-cols-1 gap-4 mt-2">
-                <SubmittedTimeSlot/>
-                <TimeSlot/>
-                <TimeSlotAdder/>
+                <TimeSlotContainer/>
             </div>
 
         </div>
