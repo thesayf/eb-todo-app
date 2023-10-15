@@ -1,58 +1,48 @@
 import React, {useState} from "react";
 import { useAppContext } from "../app_context";
-import SubmittedTimeSlot from "./submitted_time_slot_component";
+import { Task } from "../app_context";
 
-const TimeSlot: React.FC = () => {
+type TimeSlotProps = {
+    index: number;
+    slotName: string;
+    startTime: string;
+    endTime: string;
+    tasks: Task[];
+}
+
+const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSlotName, startTime:initialStartTime, endTime:initialEndTime, tasks:initialTasks }) => {
     const { timeSlots, setTimeSlots } = useAppContext();
-    const [slotName, setSlotName] = useState<string>("");
-    const [startTime, setStartTime] = useState<string>("");
-    const [endTime, setEndTime] = useState<string>("");
-    const [tasks, setTasks] = useState<string[]>([]);
-    const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
+    const [localTasks, setLocalTasks] = useState<string[]>(initialTasks.map(task => task.name));
+    const [localSlotName, setLocalSlotName] = useState(initialSlotName);
+    const [localStartTime, setLocalStartTime] = useState(initialStartTime);
+    const [localEndTime, setLocalEndTime] = useState(initialEndTime);
+
 
     const handleSubmit = () => {
-        const newSlot = {
-            name: slotName,
-            startTime: startTime,
-            endTime: endTime,
-            tasks: tasks.map((task, index) => {
-                return {
-                    number: index + 1,
-                    name: task,
-                    completed: false
-                };
-            }),
-            isSubmitted: true
-        };
-    
-        // Replace the last slot (the unsubmitted one) with the new submitted slot.
-        const newTimeSlots = [...timeSlots];
-        newTimeSlots[newTimeSlots.length - 1] = newSlot;
-    
-        setTimeSlots(newTimeSlots);
+        const updatedTimeSlots = [...timeSlots];
+        
+        updatedTimeSlots[index].isSubmitted = true;
+        updatedTimeSlots[index].name = localSlotName; // Update slot name
+        updatedTimeSlots[index].startTime = localStartTime; // Update start time
+        updatedTimeSlots[index].endTime = localEndTime; // Update end time
+        updatedTimeSlots[index].tasks = localTasks.map((name, idx) => ({ number: idx + 1, name, completed: false }));
+        
+        setTimeSlots(updatedTimeSlots);
+    }
+
+    const handleTaskChange = (idx: number, value: string) => {
+        const updatedTasks = [...localTasks];
+        updatedTasks[idx] = value;
+        setLocalTasks(updatedTasks);
     };
 
-    if (isSubmitted) {
-        const taskObjects = tasks.map((taskName, index) => ({
-            number: index + 1,
-            name: taskName,
-            completed: false,
-        }));
-    
-        return (
-            <SubmittedTimeSlot 
-                slotName={slotName} 
-                startTime={startTime} 
-                endTime={endTime} 
-                tasks={taskObjects} 
-                onEdit={() => setIsSubmitted(false)} 
-            />
-        );
-    }
+    const handleAddTask = () => {
+        setLocalTasks([...localTasks, ""]);
+    };
 
 
     return (
-        <div className="col-span-full p-4 border rounded-md flex flex-col space-y-4">
+        <div className="col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2">
             {/* Main Content */}
             <div className="flex-grow space-y-4">
                 {/* Header */}
@@ -64,8 +54,8 @@ const TimeSlot: React.FC = () => {
                             name="slotName" 
                             placeholder="Time Slot Name" 
                             className="border rounded-md w-full p-1"
-                            value={slotName}
-                            onChange={(e) => setSlotName(e.target.value)}
+                            value={localSlotName}
+                            onChange={(e) => setLocalSlotName(e.target.value)}
                             />
                     </div>
                     {/* Time Pickers */}
@@ -75,16 +65,16 @@ const TimeSlot: React.FC = () => {
                             type="time" 
                             name="startTime" 
                             className="border rounded-md p-1" 
-                            value={startTime}
-                            onChange={(e) => setStartTime(e.target.value)}
+                            value={localStartTime}
+                            onChange={(e) => setLocalStartTime(e.target.value)}
                             />
                         <label>End:</label>
                         <input 
                             type="time" 
                             name="endTime" 
                             className="border rounded-md p-1" 
-                            value={endTime}
-                            onChange={(e) => setEndTime(e.target.value)}
+                            value={localEndTime}
+                            onChange={(e) => setLocalEndTime(e.target.value)}
                             />
                     </div>
                 </div>
@@ -93,19 +83,15 @@ const TimeSlot: React.FC = () => {
                 <div className="space-y-2">
                     <ul className="list-decimal pl-5">
                         {
-                            tasks.map((task, index) => {
+                            localTasks.map((taskName, idx) => {
                                 return (
-                                    <li key={index}>
+                                    <li key={idx}>
                                         <input 
                                             type="text" 
-                                            placeholder={`Task ${index + 1}`} 
+                                            placeholder={`Task ${idx + 1}`} 
                                             className="border rounded-md w-full p-1 mt-2" 
-                                            value={task}
-                                            onChange={(e) => {
-                                                const newTasks = [...tasks];
-                                                newTasks[index] = e.target.value;
-                                                setTasks(newTasks);
-                                            }}
+                                            value={taskName}
+                                            onChange={(e) => handleTaskChange(idx, e.target.value)}
                                             />
                                     </li>
                                 )
@@ -114,7 +100,7 @@ const TimeSlot: React.FC = () => {
                     </ul>
                     <button 
                         className="btn btn-outline btn-primary mt-2"
-                        onClick={() => setTasks([...tasks, ""])}
+                        onClick={handleAddTask}
                         >
                         + Add Task
                     </button>
@@ -136,5 +122,5 @@ const TimeSlot: React.FC = () => {
 
 
 
-export default TimeSlot;
+export default UnsubmittedTimeSlot;
 
