@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import { useAppContext } from "../app_context";
 import { Task } from "../app_context";
 
@@ -16,6 +16,8 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
     const [localSlotName, setLocalSlotName] = useState(initialSlotName);
     const [localStartTime, setLocalStartTime] = useState(initialStartTime);
     const [localEndTime, setLocalEndTime] = useState(initialEndTime);
+    const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
 
 
     const handleSubmit = () => {
@@ -44,6 +46,23 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
         const updatedTasks = [...localTasks];
         updatedTasks.splice(idx, 1);  // remove the task from the list
         setLocalTasks(updatedTasks);
+    }
+
+    const insertTaskBelow = (idx: number) => {
+        const updatedTasks = [...localTasks];
+        updatedTasks.splice(idx + 1, 0, "");  // Insert an empty task right after the current index
+        setLocalTasks(updatedTasks);
+        setTimeout(() => {
+            inputRefs.current[idx + 1]?.focus();
+        }, 0);
+    }
+    
+
+    const handleKeyDown = (e: React.KeyboardEvent, idx: number) => {
+        if (e.key === 'Enter') {  // Check if Enter key was pressed
+            e.preventDefault();   // Prevent any default behavior
+            insertTaskBelow(idx);
+        }
     }
 
 
@@ -99,6 +118,8 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
                                                 className="border rounded-md w-full p-1 mt-2" 
                                                 value={taskName}
                                                 onChange={(e) => handleTaskChange(idx, e.target.value)}
+                                                onKeyDown={(e) => handleKeyDown(e, idx)}
+                                                ref={el => inputRefs.current[idx] = el}
                                             />
                                             <button 
                                                 className="btn btn-circle ml-2 btn-xs btn-primary"
