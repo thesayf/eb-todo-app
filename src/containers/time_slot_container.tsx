@@ -6,8 +6,7 @@ import SubmittedTimeSlot from "../components/submitted_time_slot_component";
 
 const TimeSlotContainer: React.FC = () => {
     const { timeSlots } = useAppContext();
-    console.log(timeSlots);
-
+    
     return (
         <div>
             {timeSlots.map((slot, index) => (

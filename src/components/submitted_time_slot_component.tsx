@@ -12,10 +12,23 @@ type SubmittedTimeSlotProps = {
 
 const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, startTime, endTime, tasks}) => {
     const { timeSlots, setTimeSlots } = useAppContext();
-
+    const calculateProgress = (tasks: Task[]) => {
+        const completedTasks = tasks.filter(task => task.completed).length
+        return (completedTasks / tasks.length) * 100    
+    }
+    const [progress, setProgress] = React.useState<number>(calculateProgress(tasks));
     const handleEdit = () => {
         const updatedTimeSlots = [...timeSlots];
         updatedTimeSlots[index].isSubmitted = false;
+        setTimeSlots(updatedTimeSlots);
+    }
+
+    
+
+    const handleTaskToggle = (taskIndex: number) => {
+        const updatedTimeSlots = [...timeSlots];
+        updatedTimeSlots[index].tasks[taskIndex].completed = !updatedTimeSlots[index].tasks[taskIndex].completed;
+        setProgress(calculateProgress(updatedTimeSlots[index].tasks));
         setTimeSlots(updatedTimeSlots);
     }
     
@@ -28,6 +41,9 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, 
                     {/* Time Slot Name */}
                     <div className="flex-grow mr-4">
                         <h3 className="font-semibold">{slotName}</h3>
+                    </div>
+                    <div className="flex-grow mr-4">
+                        <progress className="progress progress-primary w-56" value={progress} max="100"></progress>
                     </div>
                     {/* Time Interval */}
                     <div className="text-gray-600">
@@ -42,7 +58,12 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, 
                             <span className="border-r px-2 py-1 mr-2">{idx + 1}</span>
                             <span className="flex-grow">{task.name}</span>
                             <div className="border-l px-2 py-1 ml-2">
-                                <input type="checkbox" className="checkbox checkbox-primary" />
+                                <input 
+                                    type="checkbox" 
+                                    className="checkbox checkbox-primary" 
+                                    checked={task.completed}
+                                    onChange={() => handleTaskToggle(idx)}
+                                />
                             </div>
                         </div>
                     ))}
