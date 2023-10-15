@@ -40,6 +40,12 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
         setLocalTasks([...localTasks, ""]);
     };
 
+    const handleDeleteTask = (idx: number) => {
+        const updatedTasks = [...localTasks];
+        updatedTasks.splice(idx, 1);  // remove the task from the list
+        setLocalTasks(updatedTasks);
+    }
+
 
     return (
         <div className="col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2">
@@ -86,13 +92,21 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
                             localTasks.map((taskName, idx) => {
                                 return (
                                     <li key={idx}>
-                                        <input 
-                                            type="text" 
-                                            placeholder={`Task ${idx + 1}`} 
-                                            className="border rounded-md w-full p-1 mt-2" 
-                                            value={taskName}
-                                            onChange={(e) => handleTaskChange(idx, e.target.value)}
+                                        <div className="flex items-center">
+                                            <input 
+                                                type="text" 
+                                                placeholder={`Task ${idx + 1}`} 
+                                                className="border rounded-md w-full p-1 mt-2" 
+                                                value={taskName}
+                                                onChange={(e) => handleTaskChange(idx, e.target.value)}
                                             />
+                                            <button 
+                                                className="btn btn-circle ml-2 btn-xs btn-primary"
+                                                onClick={() => handleDeleteTask(idx)}
+                                            >
+                                                x
+                                            </button>
+                                        </div>
                                     </li>
                                 )
                             })
