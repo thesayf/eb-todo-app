@@ -1,6 +1,7 @@
 import React, {createContext, useContext, ReactNode} from "react";
 
 export interface Task {
+    id: number;
     number: number;
     name: string;
     completed: boolean;

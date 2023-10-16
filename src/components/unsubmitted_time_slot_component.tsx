@@ -12,7 +12,7 @@ type TimeSlotProps = {
 
 const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSlotName, startTime:initialStartTime, endTime:initialEndTime, tasks:initialTasks }) => {
     const { timeSlots, setTimeSlots } = useAppContext();
-    const [localTasks, setLocalTasks] = useState<string[]>(initialTasks.map(task => task.name));
+    const [localTasks, setLocalTasks] = useState<Task[]>(initialTasks);
     const [localSlotName, setLocalSlotName] = useState(initialSlotName);
     const [localStartTime, setLocalStartTime] = useState(initialStartTime);
     const [localEndTime, setLocalEndTime] = useState(initialEndTime);
@@ -23,23 +23,50 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
     const handleSubmit = () => {
         const updatedTimeSlots = [...timeSlots];
         
+        const updatedTasks = localTasks.map((task) => {
+            // Assuming that each task in localTasks now has an 'id' property
+            const existingTask = updatedTimeSlots[index].tasks.find(existing => existing.id === task.id);
+            
+            if (existingTask) {
+                // If there's an existing task with the same ID, copy its completed state and other attributes
+                return {
+                    id: existingTask.id,
+                    number: existingTask.number,
+                    name: existingTask.name,
+                    completed: existingTask.completed
+                };
+            } else {
+                // If it's a new task, set completed as false by default
+                const newNumber = (updatedTimeSlots[index].tasks.length > 0) ? 
+                    updatedTimeSlots[index].tasks[updatedTimeSlots[index].tasks.length - 1].number + 1 : 1;
+                return {
+                    id: task.id, // Assuming that the new task also comes with an ID
+                    number: newNumber,
+                    name: task.name,
+                    completed: false
+                };
+            }
+        });
+        
         updatedTimeSlots[index].isSubmitted = true;
         updatedTimeSlots[index].name = localSlotName; // Update slot name
         updatedTimeSlots[index].startTime = localStartTime; // Update start time
         updatedTimeSlots[index].endTime = localEndTime; // Update end time
-        updatedTimeSlots[index].tasks = localTasks.map((name, idx) => ({ number: idx + 1, name, completed: false }));
+        updatedTimeSlots[index].tasks = updatedTasks; // Assign the updated tasks
         
         setTimeSlots(updatedTimeSlots);
     }
+    
 
     const handleTaskChange = (idx: number, value: string) => {
         const updatedTasks = [...localTasks];
-        updatedTasks[idx] = value;
+        updatedTasks[idx].name = value;
         setLocalTasks(updatedTasks);
     };
 
     const handleAddTask = () => {
-        setLocalTasks([...localTasks, ""]);
+        const newTaskId = localTasks.length > 0 ? Math.max(...localTasks.map(task => task.id)) + 1 : 1;
+        setLocalTasks([...localTasks, { id: newTaskId, name: "", number: localTasks.length + 1, completed: false }]);
     };
 
     const handleDeleteTask = (idx: number) => {
@@ -49,8 +76,9 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
     }
 
     const insertTaskBelow = (idx: number) => {
+        const newTaskId = localTasks.length > 0 ? Math.max(...localTasks.map(task => task.id)) + 1 : 1;
         const updatedTasks = [...localTasks];
-        updatedTasks.splice(idx + 1, 0, "");  // Insert an empty task right after the current index
+        updatedTasks.splice(idx + 1, 0, { id: newTaskId, name: "", number: idx + 2, completed: false });
         setLocalTasks(updatedTasks);
         setTimeout(() => {
             inputRefs.current[idx + 1]?.focus();
@@ -106,33 +134,33 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
 
                 {/* Tasks */}
                 <div className="space-y-2">
-                    <ul className="list-decimal pl-5">
-                        {
-                            localTasks.map((taskName, idx) => {
-                                return (
-                                    <li key={idx}>
-                                        <div className="flex items-center">
-                                            <input 
-                                                type="text" 
-                                                placeholder={`Task ${idx + 1}`} 
-                                                className="border rounded-md w-full p-1 mt-2" 
-                                                value={taskName}
-                                                onChange={(e) => handleTaskChange(idx, e.target.value)}
-                                                onKeyDown={(e) => handleKeyDown(e, idx)}
-                                                ref={el => inputRefs.current[idx] = el}
-                                            />
-                                            <button 
-                                                className="btn btn-circle ml-2 btn-xs btn-primary"
-                                                onClick={() => handleDeleteTask(idx)}
-                                            >
-                                                x
-                                            </button>
-                                        </div>
-                                    </li>
-                                )
-                            })
-                        }
-                    </ul>
+                <ul className="list-decimal pl-5">
+            {
+                localTasks.map((task, idx) => {
+                    return (
+                        <li key={idx}>
+                            <div className="flex items-center">
+                                <input 
+                                    type="text" 
+                                    placeholder={`Task ${idx + 1}`} 
+                                    className="border rounded-md w-full p-1 mt-2" 
+                                    value={task.name}
+                                    onChange={(e) => handleTaskChange(idx, e.target.value)}
+                                    onKeyDown={(e) => handleKeyDown(e, idx)}
+                                    ref={el => inputRefs.current[idx] = el}
+                                />
+                                <button 
+                                    className="btn btn-circle ml-2 btn-xs btn-primary"
+                                    onClick={() => handleDeleteTask(idx)}
+                                >
+                                    x
+                                </button>
+                            </div>
+                        </li>
+                    )
+                })
+            }
+        </ul>
                     <button 
                         className="btn btn-outline btn-primary mt-2"
                         onClick={handleAddTask}
