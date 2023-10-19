@@ -12,6 +12,8 @@ type SubmittedTimeSlotProps = {
 
 const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, startTime, endTime, tasks}) => {
     const { timeSlots, setTimeSlots } = useAppContext();
+    const tasksCompleted = tasks.filter(task => task.completed).length
+    const totalTasks = tasks.length
     const calculateProgress = (tasks: Task[]) => {
         const completedTasks = tasks.filter(task => task.completed).length
         return (completedTasks / tasks.length) * 100    
@@ -23,7 +25,15 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, 
         setTimeSlots(updatedTimeSlots);
     }
 
+    const completedSlotCheck = () => {
+        return progress === 0 ? true : false  
+    }
     
+    const handleComplete = () => {
+        const updatedTimeSlots = [...timeSlots];
+        updatedTimeSlots[index].isCompleted = true;
+        setTimeSlots(updatedTimeSlots);
+    }
 
     const handleTaskToggle = (taskIndex: number) => {
         const updatedTimeSlots = [...timeSlots];
@@ -68,20 +78,23 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, 
                         </div>
                     ))}
                 </div>
-
-
             </div>
 
             {/* Edit Button */}
             <div className="mt-2 flex justify-end">
                 <button 
-                    className="btn btn-outline btn-primary"
+                    className="btn btn-outline btn-primary mr-2"
                     onClick={handleEdit}
                     >
                     Edit Slot
                 </button>
+                {
+                    progress === 100 ? <button className="btn btn-outline btn-success" onClick={handleComplete}>All Tasks Complete</button> : <button className="btn btn-outline btn-info " disabled={completedSlotCheck()} onClick={handleComplete}>{tasksCompleted}/{totalTasks} Tasks Complete</button>
+                }
+                
             </div>
         </div>
+
     )
 }
 
