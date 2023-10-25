@@ -49,6 +49,7 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
         });
         
         updatedTimeSlots[index].isSubmitted = true;
+        updatedTimeSlots[index].status = "default";
         updatedTimeSlots[index].name = localSlotName; // Update slot name
         updatedTimeSlots[index].startTime = localStartTime; // Update start time
         updatedTimeSlots[index].endTime = localEndTime; // Update end time

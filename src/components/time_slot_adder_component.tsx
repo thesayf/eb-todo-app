@@ -12,7 +12,7 @@ const TimeSlotAdder: React.FC = () => {
             endTime: "",
             tasks: [],
             isSubmitted: false,
-            isCompleted: false
+            status: "default"
         };
     
         setTimeSlots([...timeSlots, newUnsubmittedSlot]);

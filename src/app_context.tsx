@@ -13,7 +13,7 @@ interface TimeSlot {
     endTime: string;
     tasks: Task[];
     isSubmitted: boolean;
-    isCompleted: boolean;
+    status: string
 }
 
 interface AppState {

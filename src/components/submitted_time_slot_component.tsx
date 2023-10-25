@@ -26,12 +26,21 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, 
     }
 
     const completedSlotCheck = () => {
-        return progress === 0 ? true : false  
+
+        if (calculateProgress(tasks) === 0) {
+            return "incomplete"
+        } else if (calculateProgress(tasks) === 100) {
+            return "completed"
+        } else {
+            return "partiallyCompleted"
+        }
+
+        // return progress === 0 ? true : false  
     }
     
     const handleComplete = () => {
         const updatedTimeSlots = [...timeSlots];
-        updatedTimeSlots[index].isCompleted = true;
+        updatedTimeSlots[index].status = completedSlotCheck()
         setTimeSlots(updatedTimeSlots);
     }
 
@@ -89,7 +98,7 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, 
                     Edit Slot
                 </button>
                 {
-                    progress === 100 ? <button className="btn btn-outline btn-success" onClick={handleComplete}>All Tasks Complete</button> : <button className="btn btn-outline btn-info " disabled={completedSlotCheck()} onClick={handleComplete}>{tasksCompleted}/{totalTasks} Tasks Complete</button>
+                    progress === 100 ? <button className="btn btn-outline btn-success" onClick={handleComplete}>All Tasks Complete</button> : <button className="btn btn-outline btn-info " onClick={handleComplete}>{tasksCompleted}/{totalTasks} Tasks Complete</button>
                 }
                 
             </div>

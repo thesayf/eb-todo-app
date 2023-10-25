@@ -1,8 +1,8 @@
-import React from "react"
+import React from "react";
 import { useAppContext } from "../app_context"
-import { Task } from "../app_context"
+import { Task } from "../app_context";
 
-type CompletedSlotProps = {
+type InCompleteSlotProps = {
     index: number;
     slotName: string;
     startTime: string;
@@ -10,7 +10,7 @@ type CompletedSlotProps = {
     tasks: Task[]; 
 }
 
-const CompletedTimeSlot: React.FC<CompletedSlotProps> = ({index, slotName, startTime, endTime, tasks }) => {
+const InCompleteSlotComponent: React.FC<InCompleteSlotProps> = ({index, slotName, startTime, endTime, tasks }) => {
     const { timeSlots, setTimeSlots } = useAppContext();
 
 
@@ -20,15 +20,15 @@ const CompletedTimeSlot: React.FC<CompletedSlotProps> = ({index, slotName, start
         updatedTimeSlots[index].status = "default";
         setTimeSlots(updatedTimeSlots);
     }
-
-    return(
-        <div className="col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2 bg-accent-focus text-white">
+    
+    return (
+        <div className="col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2 bg-error text-white">
         <div className="flex-grow space-y-4">
             {/* Header */}
             <div className="flex items-center justify-between">
                 {/* Time Slot Name */}
                 <div className="flex-grow mr-4">
-                    <h3 className="font-semibold">{slotName} - Completed!</h3>
+                    <h3 className="font-semibold">{slotName} - Incomplete No Tasks Completed</h3>
                 </div>
                 <div className="text-gray-200">
                     Start: {startTime} - End: {endTime}
@@ -39,8 +39,7 @@ const CompletedTimeSlot: React.FC<CompletedSlotProps> = ({index, slotName, start
                 tasks.map((task, taskIndex) => (
                     <div className="flex items-center">
                        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current h-6 w-6" fill="none" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="9" strokeWidth="2"></circle>
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4"></path>
+                          <circle cx="12" cy="12" r="9" strokeWidth="2"></circle>
                         </svg>
                         <span className="ml-1">{task.name}</span>
                     </div>
@@ -64,7 +63,4 @@ const CompletedTimeSlot: React.FC<CompletedSlotProps> = ({index, slotName, start
     )
 }
 
-export default CompletedTimeSlot;
-
-
-    
+export default InCompleteSlotComponent;
