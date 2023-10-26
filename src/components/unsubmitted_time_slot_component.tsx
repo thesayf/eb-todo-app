@@ -18,6 +18,12 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
     const [localEndTime, setLocalEndTime] = useState(initialEndTime);
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
+    const handleDeleteSlot = () => {
+        const updatedTimeSlots = [...timeSlots];
+        updatedTimeSlots.splice(index, 1);
+        setTimeSlots(updatedTimeSlots);
+    }
+
 
 
     const handleSubmit = () => {
@@ -173,6 +179,12 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
 
             {/* Submit Button */}
             <div className="mt-2 flex justify-end">
+            <button 
+                    className="btn btn-error mr-2"
+                    onClick={handleDeleteSlot}
+                >
+                    Delete
+                </button>
                 <button 
                     className="btn btn-primary"
                     onClick={handleSubmit}

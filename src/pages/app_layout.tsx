@@ -6,8 +6,6 @@ import DateComponent from "../components/date_component";
 import KeyObjectivesHeader from "../headers/key_objectives_header";
 import ObjectiveOne from "../components/objective_one_component";
 import ObjectiveTwo from "../components/objective_two_component";
-import ObjectiveThree from "../components/objective_three_component";
-import ObjectiveFour from "../components/objective_four_component";
 import ScheduleHeader from "../headers/schedule_header";
 import Navbar from "../components/navbar_component";
 import DayTab from "../components/day_tab_component";
@@ -19,15 +17,16 @@ const AppLayout: React.FC = () => {
         <div className="mx-20 my-10">
 
             {/* Nav bar and Day Tab*/}
-            <div className="grid grid-cols-1 md:grid-cols-2" >
+            <div className="grid grid-cols-1 md:grid-cols-3" >
                 <Navbar/>
+                <DateComponent/>
                 <DayTab/>
             </div>
 
             {/* Logo and App Name */}
-            <div className="grid grid-cols-1 md:grid-cols-2 h-20">
+            <div className="grid grid-cols-1 md:grid-cols-1 h-30">
                 <Logo/>
-                <DateComponent/>
+                
             </div>
 
             {/* Date and Main Goal Headers */}
@@ -47,11 +46,10 @@ const AppLayout: React.FC = () => {
             </div>
 
             {/* 4 Sub Objectives */}
-            <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 gap-4 mt-2">                
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">                
                 <ObjectiveOne/>
                 <ObjectiveTwo/>
-                <ObjectiveThree/>
-                <ObjectiveFour/>    
+                
             </div>
 
             {/* Header For Todays Schedule */}
