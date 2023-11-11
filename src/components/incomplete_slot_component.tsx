@@ -46,13 +46,6 @@ const InCompleteSlotComponent: React.FC<InCompleteSlotProps> = ({index, slotName
 
                 ))
             }
-                
-                {/* // <div className="flex items-center">
-                //     <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current h-6 w-6" fill="none" viewBox="0 0 24 24">
-                //         <circle cx="12" cy="12" r="9" strokeWidth="2"></circle>
-                //     </svg>
-                //     <span className="ml-1">Your purchase has been confirmed!</span>
-                // </div> */}
         </div>
     
         {/* View Details Button */}

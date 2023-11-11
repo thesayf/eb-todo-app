@@ -180,7 +180,7 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
             {/* Submit Button */}
             <div className="mt-2 flex justify-end">
             <button 
-                    className="btn btn-error mr-2"
+                    className="btn btn-outline btn-error mr-2"
                     onClick={handleDeleteSlot}
                 >
                     Delete
