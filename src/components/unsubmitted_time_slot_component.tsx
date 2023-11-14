@@ -1,6 +1,6 @@
 import React, {useState, useRef} from "react";
 import { useAppContext } from "../app_context";
-import { Task } from "../app_context";
+import { Task, Assignment } from "../app_context";
 
 type TimeSlotProps = {
     index: number;
@@ -17,6 +17,7 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
     const [localStartTime, setLocalStartTime] = useState(initialStartTime);
     const [localEndTime, setLocalEndTime] = useState(initialEndTime);
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+    const { mainGoal, objective_one, objective_two } = useAppContext();
 
     const handleDeleteSlot = () => {
         const updatedTimeSlots = [...timeSlots];
@@ -24,8 +25,14 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
         setTimeSlots(updatedTimeSlots);
     }
 
-
-
+    const assignmentOptions: Assignment[] = [
+        { type: "Stand Alone Task", description: "Stand Alone Task" },
+        { type: "Main Goal", description: mainGoal.description },
+        { type: "Objective One", description: objective_one.description },
+        { type: "Objective Two", description: objective_two.description },
+    ]
+    
+    
     const handleSubmit = () => {
         const updatedTimeSlots = [...timeSlots];
         
@@ -39,7 +46,9 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
                     id: existingTask.id,
                     number: existingTask.number,
                     name: existingTask.name,
-                    completed: existingTask.completed
+                    completed: existingTask.completed,
+                    assignment: existingTask.assignment,
+                                    
                 };
             } else {
                 // If it's a new task, set completed as false by default
@@ -49,7 +58,8 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
                     id: task.id, // Assuming that the new task also comes with an ID
                     number: newNumber,
                     name: task.name,
-                    completed: false
+                    completed: false,
+                    assignment: task.assignment,
                 };
             }
         });
@@ -63,7 +73,12 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
         
         setTimeSlots(updatedTimeSlots);
     }
-    
+
+    const handleAssignmentChange = (idx: number, value: Assignment) => {
+        const updatedTasks = [...localTasks];
+        updatedTasks[idx].assignment = value;
+        setLocalTasks(updatedTasks);
+    }
 
     const handleTaskChange = (idx: number, value: string) => {
         const updatedTasks = [...localTasks];
@@ -73,7 +88,11 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
 
     const handleAddTask = () => {
         const newTaskId = localTasks.length > 0 ? Math.max(...localTasks.map(task => task.id)) + 1 : 1;
-        setLocalTasks([...localTasks, { id: newTaskId, name: "", number: localTasks.length + 1, completed: false }]);
+        setLocalTasks([...localTasks, { 
+            id: newTaskId, name: "", 
+            number: localTasks.length + 1, 
+            completed: false, 
+            assignment: assignmentOptions[0] }]);
     };
 
     const handleDeleteTask = (idx: number) => {
@@ -85,14 +104,17 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
     const insertTaskBelow = (idx: number) => {
         const newTaskId = localTasks.length > 0 ? Math.max(...localTasks.map(task => task.id)) + 1 : 1;
         const updatedTasks = [...localTasks];
-        updatedTasks.splice(idx + 1, 0, { id: newTaskId, name: "", number: idx + 2, completed: false });
+        updatedTasks.splice(idx + 1, 0, { 
+            id: newTaskId, name: "", 
+            number: idx + 2, 
+            completed: false, 
+            assignment: assignmentOptions[0] });
         setLocalTasks(updatedTasks);
         setTimeout(() => {
             inputRefs.current[idx + 1]?.focus();
         }, 0);
     }
     
-
     const handleKeyDown = (e: React.KeyboardEvent, idx: number) => {
         if (e.key === 'Enter') {  // Check if Enter key was pressed
             e.preventDefault();   // Prevent any default behavior
@@ -140,22 +162,40 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
                 </div>
 
                 {/* Tasks */}
-                <div className="space-y-2">
+                <div className="space-y-2 ">
                 <ul className="list-decimal pl-5">
             {
                 localTasks.map((task, idx) => {
                     return (
                         <li key={idx}>
-                            <div className="flex items-center">
+                            <div className="flex items-center mt-2">
                                 <input 
                                     type="text" 
                                     placeholder={`Task ${idx + 1}`} 
-                                    className="border rounded-md w-full p-1 mt-2" 
+                                    className="border rounded-md w-full p-1" 
                                     value={task.name}
                                     onChange={(e) => handleTaskChange(idx, e.target.value)}
                                     onKeyDown={(e) => handleKeyDown(e, idx)}
                                     ref={el => inputRefs.current[idx] = el}
                                 />
+                                <select 
+                                    className="select select-bordered select-sm ml-2"
+                                    value={task.assignment.type}
+                                    onChange={(e) => {
+                                        const option = assignmentOptions.find(option => option.type === e.target.value);
+                                        if (option) {
+                                            handleAssignmentChange(idx, option);
+                                        }
+                                    }}
+                                >
+                                    {
+                                        assignmentOptions.map((option, idx) => {
+                                            return (
+                                                <option key={idx} value={option.type}>{option.description}</option>
+                                            )
+                                        })
+                                    }
+                                </select>
                                 <button 
                                     className="btn btn-circle ml-2 btn-xs btn-primary"
                                     onClick={() => handleDeleteTask(idx)}

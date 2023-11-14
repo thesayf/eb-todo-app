@@ -26,7 +26,6 @@ const AppLayout: React.FC = () => {
             {/* Logo and App Name */}
             <div className="grid grid-cols-1 md:grid-cols-1 h-30">
                 <Logo/>
-                
             </div>
 
             {/* Date and Main Goal Headers */}
@@ -36,7 +35,6 @@ const AppLayout: React.FC = () => {
 
             {/* Date and Main Goal */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 h-16 mt-2">
-                
                 <MainGoal/>
             </div>
 
@@ -45,11 +43,14 @@ const AppLayout: React.FC = () => {
                 <KeyObjectivesHeader/>
             </div>
 
-            {/* 4 Sub Objectives */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">                
-                <ObjectiveOne/>
-                <ObjectiveTwo/>
-                
+            {/* 2 Sub Objectives */}
+            <div className="flex flex-row mt-2 gap-4">
+                <div className="w-1/2">
+                    <ObjectiveOne />
+                </div>
+                <div className="w-1/2">
+                    <ObjectiveTwo />
+                </div>
             </div>
 
             {/* Header For Todays Schedule */}

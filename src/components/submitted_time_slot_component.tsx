@@ -25,8 +25,15 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, 
         setTimeSlots(updatedTimeSlots);
     }
 
-    const completedSlotCheck = () => {
+    const handleAssignmentDisplay = (task: Task ) => {
+        if (task.assignment.type === "Stand Alone Task") {
+            return "Stand Alone Task";
+        } else {
+            return `${task.assignment.type}: ${task.assignment.description}`;
+        }
+    }
 
+    const completedSlotCheck = () => {
         if (calculateProgress(tasks) === 0) {
             return "incomplete"
         } else if (calculateProgress(tasks) === 100) {
@@ -34,8 +41,6 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, 
         } else {
             return "partiallyCompleted"
         }
-
-        // return progress === 0 ? true : false  
     }
     
     const handleComplete = () => {
@@ -76,6 +81,7 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, 
                         <div key={idx} className="card border w-full h-16 bg-base-100 shadow-xl p-2 flex flex-row items-center">
                             <span className="border-r px-2 py-1 mr-2">{idx + 1}</span>
                             <span className="flex-grow">{task.name}</span>
+                            <div className="badge badge-primary">{handleAssignmentDisplay(task)}</div>
                             <div className="border-l px-2 py-1 ml-2">
                                 <input 
                                     type="checkbox" 

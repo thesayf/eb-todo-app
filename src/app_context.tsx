@@ -5,6 +5,12 @@ export interface Task {
     number: number;
     name: string;
     completed: boolean;
+    assignment: Assignment;
+}
+
+export interface Assignment {
+    type: string;
+    description: string;
 }
 
 interface TimeSlot {
@@ -18,6 +24,7 @@ interface TimeSlot {
 
 interface GoalObjective {
     description: string;
+    submited: boolean;
     completed: boolean;
 }
 
@@ -47,9 +54,9 @@ interface AppProviderProps {
 }
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
-    const [mainGoal, setMainGoal] = React.useState<GoalObjective>({ description: "", completed: false });
-    const [objective_one, set_objective_one] = React.useState<GoalObjective>({ description: "", completed: false });
-    const [objective_two, set_objective_two] = React.useState<GoalObjective>({ description: "", completed: false });
+    const [mainGoal, setMainGoal] = React.useState<GoalObjective>({ description: "", completed: false, submited: false });
+    const [objective_one, set_objective_one] = React.useState<GoalObjective>({ description: "", completed: false, submited:false });
+    const [objective_two, set_objective_two] = React.useState<GoalObjective>({ description: "", completed: false, submited:false});
     const [objective_three, set_objective_three] = React.useState<string>("");
     const [objective_four, set_objective_four] = React.useState<string>("");
     const [timeSlots, setTimeSlots] = React.useState<TimeSlot[]>([]);
@@ -58,7 +65,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
 
     const determineTier = (points: number, mainGoalCompleted: boolean, objectivesCompleted: number): string => {
-        console.log("points are",points, "main goal completed is ", mainGoalCompleted, "the amount of objectives completed is", objectivesCompleted)
         if(mainGoalCompleted === true && objectivesCompleted === 2 && points >= 1000){
             return "Elite"
         }
@@ -116,11 +122,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
     useEffect(() => {
         // This effect is only responsible for determining the tier based on the updated points
-        console.log("Points updated")
         const objectivesCompleted = [objective_one, objective_two].filter(obj => obj.completed).length;
         const userTier = determineTier(points, mainGoal.completed, objectivesCompleted);
         setPerformanceRating(userTier);
-        console.log(userTier)
       }, [points, mainGoal, objective_one, objective_two]);
 
     const contextValue = {
