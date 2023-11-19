@@ -1,6 +1,8 @@
 import React, {useState, useRef} from "react";
 import { useAppContext } from "../app_context";
 import { Task, Assignment } from "../app_context";
+import { v4 as uuidv4 } from 'uuid';
+
 
 type TimeSlotProps = {
     index: number;
@@ -39,7 +41,7 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
         const updatedTasks = localTasks.map((task) => {
             // Assuming that each task in localTasks now has an 'id' property
             const existingTask = updatedTimeSlots[index].tasks.find(existing => existing.id === task.id);
-            
+
             if (existingTask) {
                 // If there's an existing task with the same ID, copy its completed state and other attributes
                 return {
@@ -87,9 +89,9 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
     };
 
     const handleAddTask = () => {
-        const newTaskId = localTasks.length > 0 ? Math.max(...localTasks.map(task => task.id)) + 1 : 1;
         setLocalTasks([...localTasks, { 
-            id: newTaskId, name: "", 
+            id: uuidv4(), 
+            name: "", 
             number: localTasks.length + 1, 
             completed: false, 
             assignment: assignmentOptions[0] }]);
@@ -102,10 +104,10 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
     }
 
     const insertTaskBelow = (idx: number) => {
-        const newTaskId = localTasks.length > 0 ? Math.max(...localTasks.map(task => task.id)) + 1 : 1;
         const updatedTasks = [...localTasks];
         updatedTasks.splice(idx + 1, 0, { 
-            id: newTaskId, name: "", 
+            id: uuidv4(), 
+            name: "", 
             number: idx + 2, 
             completed: false, 
             assignment: assignmentOptions[0] });

@@ -1,6 +1,10 @@
 import React from 'react'
 import { Task } from '../app_context'
 import { useAppContext } from '../app_context'
+import SubmittedTaskComponent from './submitted_task_component';
+import { DndContext, closestCenter, useSensor, useSensors, PointerSensor, DragEndEvent } from '@dnd-kit/core';
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import TestTaskComponent from './testItemComponent';
 
 type SubmittedTimeSlotProps = {
     index: number;
@@ -10,6 +14,8 @@ type SubmittedTimeSlotProps = {
     tasks: Task[];  
 }
 
+const initialItems = ['task1', 'task2', 'task3']
+
 const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, startTime, endTime, tasks}) => {
     const { timeSlots, setTimeSlots } = useAppContext();
     const tasksCompleted = tasks.filter(task => task.completed).length
@@ -18,6 +24,12 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, 
         const completedTasks = tasks.filter(task => task.completed).length
         return (completedTasks / tasks.length) * 100    
     }
+
+    const [items, setItems] = React.useState(initialItems);
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+      );
     const [progress, setProgress] = React.useState<number>(calculateProgress(tasks));
     const handleEdit = () => {
         const updatedTimeSlots = [...timeSlots];
@@ -55,6 +67,59 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, 
         setProgress(calculateProgress(updatedTimeSlots[index].tasks));
         setTimeSlots(updatedTimeSlots);
     }
+
+    // const handleDragEnd = (event: DragEndEvent) => {
+    //     const { active, over } = event;
+
+    //     if (over && active.id !== over.id) {
+    //         // Find the indices of the dragged and the target items
+    //         const oldIndex = tasks.findIndex(task => task.id === active.id);
+    //         const newIndex = tasks.findIndex(task => task.id === over.id);
+    
+    //         if (oldIndex !== newIndex) {
+    //             // Reorder the tasks
+    //             const reorderedTasks = [...tasks];
+    //             const [movedItem] = reorderedTasks.splice(oldIndex, 1);
+    //             reorderedTasks.splice(newIndex, 0, movedItem);
+    //             // Update the specific time slot's tasks in the application state
+    //             const updatedTimeSlots = [...timeSlots];
+    //             updatedTimeSlots[index].tasks = reorderedTasks;
+    //             setTimeSlots(updatedTimeSlots);
+    //         }
+    //     }
+    // };
+    
+//     const handleDragEnd = (event: DragEndEvent) => {
+//     const { active, over } = event;
+
+//     if (over && active.id !== over.id) {
+//         setItems((items) => {
+//             const oldIndex = items.indexOf(active.id as string);
+//             const newIndex = items.indexOf(over.id as string);
+//             return arrayMove(items, oldIndex, newIndex);
+//         });
+//     }
+// };
+
+const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+        const oldIndex = tasks.findIndex(task => task.id === active.id);
+        const newIndex = tasks.findIndex(task => task.id === over.id);
+
+        if (oldIndex !== newIndex) {
+            setTimeSlots((currentSlots) => {
+                const updatedTimeSlots = [...currentSlots];
+                const updatedTasks = arrayMove(updatedTimeSlots[index].tasks, oldIndex, newIndex);
+                updatedTimeSlots[index].tasks = updatedTasks;
+                return updatedTimeSlots;
+            });
+        }
+    }
+};
+
+
     
     return (
         <div className="col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2">
@@ -74,25 +139,29 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({index, slotName, 
                         Start: {startTime}- End: {endTime}
                     </div>
                 </div>
-
-                {/* Tasks */}
+                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                <SortableContext items={tasks.map(task => task.id)} strategy={verticalListSortingStrategy}>
+                {/* Tasks
                 <div className="space-y-4">
                     {tasks.map((task, idx) => (
-                        <div key={idx} className="card border w-full h-16 bg-base-100 shadow-xl p-2 flex flex-row items-center">
-                            <span className="border-r px-2 py-1 mr-2">{idx + 1}</span>
-                            <span className="flex-grow">{task.name}</span>
-                            <div className="badge badge-primary">{handleAssignmentDisplay(task)}</div>
-                            <div className="border-l px-2 py-1 ml-2">
-                                <input 
-                                    type="checkbox" 
-                                    className="checkbox checkbox-primary" 
-                                    checked={task.completed}
-                                    onChange={() => handleTaskToggle(idx)}
-                                />
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                        <SubmittedTaskComponent
+                            key={idx}
+                            task={task}
+                            index={idx}
+                            slotIndex={index}
+                            handleTaskToggle={handleTaskToggle}
+                            handleAssignmentDisplay={handleAssignmentDisplay}/>
+                    ))
+                    }
+                </div> */}
+                {
+                    tasks.map((task) => (
+                    <TestTaskComponent key={task.id} item={task.name} id={task.id} /> 
+                    ))
+                }
+
+                </SortableContext>
+                </DndContext>
             </div>
 
             {/* Edit Button */}

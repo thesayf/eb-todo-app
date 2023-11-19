@@ -1,5 +1,7 @@
 import React from "react";
 import { useAppContext } from "../app_context";
+import { v4 as uuidv4 } from 'uuid';
+
 
 const TimeSlotAdder: React.FC = () => {
     const { timeSlots, setTimeSlots } = useAppContext();
@@ -7,6 +9,7 @@ const TimeSlotAdder: React.FC = () => {
     const handleAddTimeSlot = () => {
         const newUnsubmittedSlot = {
             // Assuming all these properties exist on the time slot object.
+            id: uuidv4(),
             name: "", 
             startTime: "",
             endTime: "",

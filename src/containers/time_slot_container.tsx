@@ -8,9 +8,10 @@ import PartialCompletedSlotComponent from "../components/partial_completed_slot_
 import InCompleteSlotComponent from "../components/incomplete_slot_component";
 
 const TimeSlotContainer: React.FC = () => {
-    const { timeSlots } = useAppContext();
+    const { timeSlots, setTimeSlots } = useAppContext();
     
     return (
+     
         <div>
             {timeSlots.map((slot, index) => {
                 

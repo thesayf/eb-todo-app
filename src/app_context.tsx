@@ -1,7 +1,7 @@
 import React, {createContext, useContext, ReactNode, useEffect} from "react";
 
 export interface Task {
-    id: number;
+    id: string;
     number: number;
     name: string;
     completed: boolean;
@@ -13,7 +13,8 @@ export interface Assignment {
     description: string;
 }
 
-interface TimeSlot {
+export interface TimeSlot {
+    id: string
     name: string;
     startTime: string;
     endTime: string;

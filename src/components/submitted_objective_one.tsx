@@ -4,13 +4,14 @@ import { useAppContext } from "../app_context";
 function SubmittedObjectiveOneComponent() {
 
     const { timeSlots} = useAppContext();
-
-    const objectiveTwoTasks = timeSlots.flatMap(timeSlot => timeSlot.tasks.filter((task) => task.assignment.type === "Objective Two"))
-    const totalObjectiveTwoTasks = objectiveTwoTasks.length
-    const completedObjecteveTwoTasks = objectiveTwoTasks.filter(task => task.completed).length
-    const mainGoalProgress = (completedObjecteveTwoTasks / totalObjectiveTwoTasks) * 100
-
     const { objective_one, set_objective_one } = useAppContext();
+
+    const objectiveoneTasks = timeSlots.flatMap(timeSlot => timeSlot.tasks.filter((task) => task.assignment.type === "Objective One"))
+    const totalObjectiveOneTasks = objectiveoneTasks.length
+    const completedObjecteveOneTasks = objectiveoneTasks.filter(task => task.completed).length
+    const mainGoalProgress = (completedObjecteveOneTasks / totalObjectiveOneTasks) * 100
+
+    
     const handleSubmit = () => {
         set_objective_one((prevObjective) => ({
             ...prevObjective,
@@ -42,7 +43,7 @@ function SubmittedObjectiveOneComponent() {
             {/* Progress Bar */}
             <div className="flex flex-1 items-center mr-4">
                 {
-                    totalObjectiveTwoTasks === 0 ? <p className="text-gray-600">No tasks assigned</p> : <progress className="progress progress-primary w-56" value={mainGoalProgress} max="100"></progress>
+                    totalObjectiveOneTasks === 0 ? <p className="text-gray-600">No tasks assigned</p> : <progress className="progress progress-primary w-56" value={mainGoalProgress} max="100"></progress>
                 }
             </div>
             {/* Button */}
