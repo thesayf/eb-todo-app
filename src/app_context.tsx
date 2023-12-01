@@ -46,6 +46,8 @@ interface AppState {
     setPoints: React.Dispatch<React.SetStateAction<number>>;
     performanceRating: string;
     setPerformanceRating: React.Dispatch<React.SetStateAction<string>>;
+    activeSlots: boolean;
+    setActiveSlots: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AppContext = createContext<AppState | undefined>(undefined);
@@ -63,7 +65,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     const [timeSlots, setTimeSlots] = React.useState<TimeSlot[]>([]);
     const [points, setPoints] = React.useState<number>(0);
     const [performanceRating, setPerformanceRating] = React.useState<string>("");
-
+    const [activeSlots, setActiveSlots] = React.useState<boolean>(true);
 
     const determineTier = (points: number, mainGoalCompleted: boolean, objectivesCompleted: number): string => {
         if(mainGoalCompleted === true && objectivesCompleted === 2 && points >= 1000){
@@ -144,7 +146,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         points,
         setPoints,
         performanceRating,
-        setPerformanceRating
+        setPerformanceRating,
+        activeSlots,
+        setActiveSlots
     };
 
     return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;

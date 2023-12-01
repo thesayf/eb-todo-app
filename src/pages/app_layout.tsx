@@ -11,7 +11,6 @@ import Navbar from "../components/navbar_component";
 import DayTab from "../components/day_tab_component";
 import TimeSlotContainer from "../containers/time_slot_container";
 
-
 const AppLayout: React.FC = () => {
     return(
         <div className="mx-20 my-10">
@@ -54,8 +53,9 @@ const AppLayout: React.FC = () => {
             </div>
 
             {/* Header For Todays Schedule */}
-            <div className="grid grid-cols-1 mt-2">
+            <div className="grid grid-cols-1 mt-2 ">
                 <ScheduleHeader/>
+                {/* <SlotComponentToggle/> */}
             </div>
 
             {/* Time Table */}

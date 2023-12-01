@@ -7,6 +7,7 @@ const TimeSlotAdder: React.FC = () => {
     const { timeSlots, setTimeSlots } = useAppContext();
 
     const handleAddTimeSlot = () => {
+        console.log("Adding a new time slot");
         const newUnsubmittedSlot = {
             // Assuming all these properties exist on the time slot object.
             id: uuidv4(),

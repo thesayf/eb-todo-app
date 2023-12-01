@@ -2,17 +2,18 @@ import React, {useState, useRef} from "react";
 import { useAppContext } from "../app_context";
 import { Task, Assignment } from "../app_context";
 import { v4 as uuidv4 } from 'uuid';
-
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 type TimeSlotProps = {
-    index: number;
+    id: string;
     slotName: string;
     startTime: string;
     endTime: string;
     tasks: Task[];
 }
 
-const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSlotName, startTime:initialStartTime, endTime:initialEndTime, tasks:initialTasks }) => {
+const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({id, slotName:initialSlotName, startTime:initialStartTime, endTime:initialEndTime, tasks:initialTasks }) => {
     const { timeSlots, setTimeSlots } = useAppContext();
     const [localTasks, setLocalTasks] = useState<Task[]>(initialTasks);
     const [localSlotName, setLocalSlotName] = useState(initialSlotName);
@@ -20,12 +21,23 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
     const [localEndTime, setLocalEndTime] = useState(initialEndTime);
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const { mainGoal, objective_one, objective_two } = useAppContext();
+    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+        id: id,
+        data: {
+            type: "slot",
+            slot: { id, slotName: initialSlotName, startTime: initialStartTime, endTime: initialEndTime, tasks: initialTasks }
+        }
+    });
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
+
 
     const handleDeleteSlot = () => {
-        const updatedTimeSlots = [...timeSlots];
-        updatedTimeSlots.splice(index, 1);
+        const updatedTimeSlots = timeSlots.filter(slot => slot.id !== id);
         setTimeSlots(updatedTimeSlots);
-    }
+    };
 
     const assignmentOptions: Assignment[] = [
         { type: "Stand Alone Task", description: "Stand Alone Task" },
@@ -34,47 +46,25 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
         { type: "Objective Two", description: objective_two.description },
     ]
     
-    
     const handleSubmit = () => {
-        const updatedTimeSlots = [...timeSlots];
-        
-        const updatedTasks = localTasks.map((task) => {
-            // Assuming that each task in localTasks now has an 'id' property
-            const existingTask = updatedTimeSlots[index].tasks.find(existing => existing.id === task.id);
-
-            if (existingTask) {
-                // If there's an existing task with the same ID, copy its completed state and other attributes
+        const updatedTimeSlots = timeSlots.map(slot => {
+            if (slot.id === id) {
                 return {
-                    id: existingTask.id,
-                    number: existingTask.number,
-                    name: existingTask.name,
-                    completed: existingTask.completed,
-                    assignment: existingTask.assignment,
-                                    
-                };
-            } else {
-                // If it's a new task, set completed as false by default
-                const newNumber = (updatedTimeSlots[index].tasks.length > 0) ? 
-                    updatedTimeSlots[index].tasks[updatedTimeSlots[index].tasks.length - 1].number + 1 : 1;
-                return {
-                    id: task.id, // Assuming that the new task also comes with an ID
-                    number: newNumber,
-                    name: task.name,
-                    completed: false,
-                    assignment: task.assignment,
+                    ...slot,
+                    isSubmitted: true,
+                    status: "default",
+                    name: localSlotName,
+                    startTime: localStartTime,
+                    endTime: localEndTime,
+                    tasks: localTasks // assuming localTasks is your updated tasks array
                 };
             }
+            return slot;
         });
-        
-        updatedTimeSlots[index].isSubmitted = true;
-        updatedTimeSlots[index].status = "default";
-        updatedTimeSlots[index].name = localSlotName; // Update slot name
-        updatedTimeSlots[index].startTime = localStartTime; // Update start time
-        updatedTimeSlots[index].endTime = localEndTime; // Update end time
-        updatedTimeSlots[index].tasks = updatedTasks; // Assign the updated tasks
-        
+
         setTimeSlots(updatedTimeSlots);
-    }
+    };
+
 
     const handleAssignmentChange = (idx: number, value: Assignment) => {
         const updatedTasks = [...localTasks];
@@ -126,7 +116,10 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({index, slotName:initialSl
 
 
     return (
-        <div className="col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2">
+        <div style={style} className="col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2">
+            <div ref={setNodeRef} {...attributes} {...listeners} className="drag-handle">
+                <span>☰</span> {/* Drag handle icon */}
+            </div>
             {/* Main Content */}
             <div className="flex-grow space-y-4">
                 {/* Header */}
