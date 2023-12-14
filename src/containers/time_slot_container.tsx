@@ -4,6 +4,7 @@ import ActiveSlotContainer from "./active_slot_container";
 import CompletedSlotContainer from "./completed_slot_container";
 
 const TimeSlotContainer: React.FC = () => {
+
     const { timeSlots } = useAppContext();
     const { activeSlots } = useAppContext();
 
@@ -24,6 +25,8 @@ const TimeSlotContainer: React.FC = () => {
             }
         </div>
     );
+
+
 };
 
 export default TimeSlotContainer;

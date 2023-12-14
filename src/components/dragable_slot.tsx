@@ -1,10 +1,11 @@
 import React from "react";
 import SubmittedTimeSlot from "./submitted_time_slot_component";
 import UnsubmittedTimeSlot from "./unsubmitted_time_slot_component";
+import { UniqueIdentifier } from "@dnd-kit/core";
 
 interface DragagableSlotPtrops {
     slot: any;
-    id: string;
+    id: UniqueIdentifier;
 }
 
 const DragableSlot: React.FC<DragagableSlotPtrops> = ({slot}) => {

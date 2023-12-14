@@ -2,8 +2,6 @@ import React, {useState, useRef} from "react";
 import { useAppContext } from "../app_context";
 import { Task, Assignment } from "../app_context";
 import { v4 as uuidv4 } from 'uuid';
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 
 type TimeSlotProps = {
     id: string;
@@ -21,17 +19,6 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({id, slotName:initialSlotN
     const [localEndTime, setLocalEndTime] = useState(initialEndTime);
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const { mainGoal, objective_one, objective_two } = useAppContext();
-    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-        id: id,
-        data: {
-            type: "slot",
-            slot: { id, slotName: initialSlotName, startTime: initialStartTime, endTime: initialEndTime, tasks: initialTasks }
-        }
-    });
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-    };
 
 
     const handleDeleteSlot = () => {
@@ -116,8 +103,8 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({id, slotName:initialSlotN
 
 
     return (
-        <div style={style} className="col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2">
-            <div ref={setNodeRef} {...attributes} {...listeners} className="drag-handle">
+        <div  className="col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2">
+            <div className="drag-handle">
                 <span>☰</span> {/* Drag handle icon */}
             </div>
             {/* Main Content */}

@@ -2,8 +2,6 @@ import React from 'react'
 import { Task } from '../app_context'
 import { useAppContext } from '../app_context'
 import SubmittedTaskComponent from './submitted_task_component';
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 
 type SubmittedTimeSlotProps = {
     id: string;
@@ -21,17 +19,6 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({id, slotName, sta
         const completedTasks = tasks.filter(task => task.completed).length
         return (completedTasks / tasks.length) * 100    
     }
-    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-        id: id,
-        data: {
-            type: "slot",
-            slot: { id, slotName, startTime, endTime, tasks}
-        }
-    });
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-    };
 
     const [progress, setProgress] = React.useState<number>(calculateProgress(tasks));
     const handleEdit = () => {
@@ -81,8 +68,8 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({id, slotName, sta
     };
     
     return (
-        <div style={style} className="col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2">
-             <div ref={setNodeRef} {...attributes} {...listeners} className="drag-handle">
+        <div className="col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2">
+             <div className="drag-handle">
                 <span>☰</span> {/* Drag handle icon */}
             </div>
             {/* Main Content */}
