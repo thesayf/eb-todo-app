@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { TimeSlot } from "../app_context";
 import TimeSlotAdder from "../components/time_slot_adder_component";
 import DragableSlot from "../components/dragable_slot";

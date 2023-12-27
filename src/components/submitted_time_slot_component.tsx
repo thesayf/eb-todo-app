@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Task } from '../app_context'
 import { useAppContext } from '../app_context'
 import SubmittedTaskComponent from './submitted_task_component';
+import { DndContext, DragOverlay, DragStartEvent, DragOverEvent } from '@dnd-kit/core';
+import { SortableContext, arrayMove} from '@dnd-kit/sortable';
+import { createPortal } from 'react-dom';
+
+
 
 type SubmittedTimeSlotProps = {
     id: string;
@@ -11,7 +16,9 @@ type SubmittedTimeSlotProps = {
     tasks: Task[];  
 }
 
-const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({id, slotName, startTime, endTime, tasks}) => {
+const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({id, slotName, startTime, endTime, tasks: initialTasks}) => {
+    const [activeTask, setActiveTask] = useState<Task | null>(null);
+    const [tasks, setTasks] = useState<Task[]>(initialTasks);
     const { timeSlots, setTimeSlots } = useAppContext();
     const tasksCompleted = tasks.filter(task => task.completed).length
     const totalTasks = tasks.length
@@ -66,12 +73,22 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({id, slotName, sta
         setTimeSlots(updatedTimeSlots);
         setProgress(calculateProgress(updatedTimeSlots.find(slot => slot.id === id)?.tasks || []));
     };
-    
+
+    const onDragStart = (event: DragStartEvent) => {
+        setActiveTask(event.active.data.current?.task)
+    }
+
+    const onDragOver = (event: DragOverEvent) => {  
+        const {active, over} = event;
+
+        console.log(active)
+        console.log(over)
+  
+    }
+
     return (
-        <div className="col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2">
-             <div className="drag-handle">
-                <span>☰</span> {/* Drag handle icon */}
-            </div>
+
+        <div className=" bg-base-100 col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2">
             {/* Main Content */}
             <div className="flex-grow space-y-4">
                 {/* Header */}
@@ -89,6 +106,8 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({id, slotName, sta
                     </div>
                 </div>
                 <div className="space-y-4">
+                    <DndContext onDragStart={onDragStart} onDragOver={onDragOver}>
+                    <SortableContext items={tasks.map(task => task.id)}>
                     {tasks.map((task, idx) => (
                         <SubmittedTaskComponent
                             key={idx}
@@ -98,6 +117,21 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({id, slotName, sta
                             handleAssignmentDisplay={handleAssignmentDisplay}/>
                     ))
                     }
+                    </SortableContext>
+                    {
+                        activeTask && createPortal(
+                            <DragOverlay>
+                                <SubmittedTaskComponent
+                                    task={activeTask}
+                                    index={activeTask.number -1}
+                                    handleTaskToggle={handleTaskToggle}
+                                    handleAssignmentDisplay={handleAssignmentDisplay}
+                                />
+                            </DragOverlay>, document.body
+                        )
+                    }
+
+                    </DndContext>
                 </div>
             </div>
 

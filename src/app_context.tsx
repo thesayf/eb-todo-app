@@ -3,6 +3,7 @@ import React, {createContext, useContext, ReactNode, useEffect} from "react";
 export interface Task {
     id: string;
     number: number;
+    slotId: string;
     name: string;
     completed: boolean;
     assignment: Assignment;

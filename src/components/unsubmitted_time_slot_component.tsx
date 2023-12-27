@@ -65,9 +65,10 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({id, slotName:initialSlotN
         setLocalTasks(updatedTasks);
     };
 
-    const handleAddTask = () => {
+    const handleAddTask = (slotId: string) => {
         setLocalTasks([...localTasks, { 
             id: uuidv4(), 
+            slotId: slotId,
             name: "", 
             number: localTasks.length + 1, 
             completed: false, 
@@ -80,10 +81,11 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({id, slotName:initialSlotN
         setLocalTasks(updatedTasks);
     }
 
-    const insertTaskBelow = (idx: number) => {
+    const insertTaskBelow = (idx: number, slotId: string) => {
         const updatedTasks = [...localTasks];
         updatedTasks.splice(idx + 1, 0, { 
             id: uuidv4(), 
+            slotId: slotId,
             name: "", 
             number: idx + 2, 
             completed: false, 
@@ -97,16 +99,13 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({id, slotName:initialSlotN
     const handleKeyDown = (e: React.KeyboardEvent, idx: number) => {
         if (e.key === 'Enter') {  // Check if Enter key was pressed
             e.preventDefault();   // Prevent any default behavior
-            insertTaskBelow(idx);
+            insertTaskBelow(idx, id);
         }
     }
 
 
     return (
-        <div  className="col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2">
-            <div className="drag-handle">
-                <span>☰</span> {/* Drag handle icon */}
-            </div>
+        <div className="  bg-base-100 col-span-full p-4 border rounded-md flex flex-col space-y-4 mt-2">
             {/* Main Content */}
             <div className="flex-grow space-y-4">
                 {/* Header */}
@@ -192,7 +191,7 @@ const UnsubmittedTimeSlot: React.FC<TimeSlotProps> = ({id, slotName:initialSlotN
         </ul>
                     <button 
                         className="btn btn-outline btn-primary mt-2"
-                        onClick={handleAddTask}
+                        onClick={() => handleAddTask(id)}
                         >
                         + Add Task
                     </button>
