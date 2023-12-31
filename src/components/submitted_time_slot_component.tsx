@@ -79,10 +79,32 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({id, slotName, sta
     }
 
     const onDragOver = (event: DragOverEvent) => {  
-        const {active, over} = event;
 
-        console.log(active)
-        console.log(over)
+        console.log("tasks[0]")
+
+        // const {active, over} = event;
+  
+        // if(!over) return 
+  
+        // const activeId = active.id;
+        // const overId = over.id;
+  
+        // if(activeId === overId) return;
+  
+        // const isActiveTask = active.data.current?.type === "Task"
+        // const isOverTask = over.data.current?.type === "Task"
+  
+        // if(isActiveTask && isOverTask) {
+        //   setTasks((tasks) => {
+        //     const activeTaskIndex = tasks.findIndex((task) => task.id === activeId);
+        //     const overTaskIndex = tasks.findIndex((task) => task.id === overId);
+            
+        //     if(tasks[activeTaskIndex].slotId !== tasks[overTaskIndex].slotId){
+        //       tasks[activeTaskIndex].slotId = tasks[overTaskIndex].slotId;
+        //     }
+        //     return arrayMove(tasks, activeTaskIndex, overTaskIndex);
+        //   })
+        // }
   
     }
 
@@ -106,7 +128,7 @@ const SubmittedTimeSlot: React.FC<SubmittedTimeSlotProps>  = ({id, slotName, sta
                     </div>
                 </div>
                 <div className="space-y-4">
-                    <DndContext onDragStart={onDragStart} onDragOver={onDragOver}>
+                    <DndContext onDragStart={onDragStart} onDragCancel={onDragOver}>
                     <SortableContext items={tasks.map(task => task.id)}>
                     {tasks.map((task, idx) => (
                         <SubmittedTaskComponent
