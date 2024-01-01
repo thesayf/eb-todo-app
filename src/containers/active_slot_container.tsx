@@ -6,6 +6,7 @@ import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { createPortal } from "react-dom";
 import TestTaskComponent from "../testcomponents/testTaskCoponent";
 import { arrayMove } from "@dnd-kit/sortable";
+import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 
 interface ActiveSlotContainerProps {
     slots: TimeSlot[];
@@ -172,6 +173,7 @@ const  ActiveSlotContainer: React.FC<ActiveSlotContainerProps> =  ({slots}) =>  
     return (
         <>
         <DndContext onDragStart={onDragStart} onDragOver={ondragover}>
+            <SortableContext items={columns.map(slot => slot.id)} strategy={rectSortingStrategy}>
             {
                 
                 columns.map((slot) => (
@@ -179,6 +181,7 @@ const  ActiveSlotContainer: React.FC<ActiveSlotContainerProps> =  ({slots}) =>  
                 ))
                 
             }
+            </SortableContext>
 
             {
                         activeTask && createPortal(
